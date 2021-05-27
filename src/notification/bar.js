@@ -1,6 +1,7 @@
 require('./bar.scss');
 
 document.addEventListener('DOMContentLoaded', () => {
+    console.log("bar.js DOMContentLoaded");
     var i18n = {};
     var lang = window.navigator.language;
     
@@ -31,6 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
         closeButton.title = i18n.close;
         closeButton.setAttribute('aria-label', i18n.close);
 
+        console.log("bar.js read bodyRect.width: " + bodyRect.width);
         if (bodyRect.width < 768) {
             document.querySelector('#template-add .add-save').textContent = i18n.yes;
             document.querySelector('#template-add .never-save').textContent = i18n.never;
@@ -45,6 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.querySelector('#template-change .change-text').textContent = i18n.notificationChangeDesc;
 
         if (getQueryVariable('add')) {
+            console.log("bar.js setting content to ADD");
             setContent(document.getElementById('template-add'));
 
             var addButton = document.querySelector('#template-add-clone .add-save'),
@@ -64,6 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
             });
         } else if (getQueryVariable('change')) {
+            console.log("bar.js setting content to CHANGE");
             setContent(document.getElementById('template-change'));
             var changeButton = document.querySelector('#template-change-clone .change-save');
             changeButton.addEventListener('click', (e) => {
@@ -73,6 +77,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
             });
         } else if (getQueryVariable('info')) {
+            console.log("bar.js setting content to INFO");
             setContent(document.getElementById('template-alert'));
             document.getElementById('template-alert-clone').textContent = getQueryVariable('info');
         }

@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', event => {
+    console.log("notificationBar DOMContentLoaded");
     if (window.location.hostname.indexOf('vault.bitwarden.com') > -1) {
         return;
     }
@@ -38,6 +39,7 @@ document.addEventListener('DOMContentLoaded', event => {
         });
     });
 
+    console.log("adding notificationBar listener");
     chrome.runtime.onMessage.addListener((msg: any, sender: any, sendResponse: Function) => {
         processMessages(msg, sendResponse);
     });
@@ -47,6 +49,7 @@ document.addEventListener('DOMContentLoaded', event => {
             if (inIframe) {
                 return;
             }
+            console.log("openNotificarBar message received");
             closeExistingAndOpenBar(msg.data.type, msg.data.typeData);
             sendResponse();
             return true;
@@ -54,6 +57,7 @@ document.addEventListener('DOMContentLoaded', event => {
             if (inIframe) {
                 return;
             }
+            console.log("closeNotificarBar message received");
             closeBar(true);
             sendResponse();
             return true;
@@ -61,10 +65,12 @@ document.addEventListener('DOMContentLoaded', event => {
             if (inIframe) {
                 return;
             }
+            console.log("adjustNotificationBar message received");
             adjustBar(msg.data);
             sendResponse();
             return true;
         } else if (msg.command === 'notificationBarPageDetails') {
+            console.log("notificationBarPageDetails message received");
             pageDetails.push(msg.data.details);
             watchForms(msg.data.forms);
             sendResponse();
