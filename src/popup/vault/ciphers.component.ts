@@ -36,6 +36,7 @@ import { CiphersComponent as BaseCiphersComponent } from 'jslib-angular/componen
 import { PopupUtilsService } from '../services/popup-utils.service';
 
 const ComponentId = 'CiphersComponent';
+const NavTypes = ['folders', 'collections', 'ciphers'];
 
 @Component({
     selector: 'app-vault-ciphers',
@@ -50,6 +51,8 @@ export class CiphersComponent extends BaseCiphersComponent implements OnInit, On
     nestedFolders: TreeNode<FolderView>[];
     nestedCollections: TreeNode<CollectionView>[];
     searchTypeSearch = false;
+    navType: string = null;
+    navIndex: number = -1;
 
     private selectedTimeout: number;
     private preventSelected = false;
@@ -224,6 +227,71 @@ export class CiphersComponent extends BaseCiphersComponent implements OnInit, On
         return !this.isSearching() &&
             ((this.nestedFolders && this.nestedFolders.length) ||
                 (this.nestedCollections && this.nestedCollections.length));
+    }
+
+    navDown() {
+        this.navIndex++;
+
+        if (!this.navType)
+            this.navType = this.getNextNavType();
+
+        while (this.navIndex >= this.getNavLength()) {
+            const nextType = this.getNextNavType();
+            if (this.navType === nextType) {
+                this.navReset();
+                return;
+            }
+
+            this.navType = nextType;
+            this.navIndex = 0;
+        }
+    }
+
+    navUp() {
+        this.navIndex--;
+
+        if (!this.navType)
+            this.navType = this.getPrevNavType();
+
+        while (this.navIndex < 0) {
+            const prevType = this.getPrevNavType();
+            if (this.navType === prevType) {
+                this.navReset();
+                return;
+            }
+
+            this.navType = prevType;
+            this.navIndex = this.getNavLength() - 1;
+        }
+    }
+
+    private getNextNavType() {
+        let nextIndex = NavTypes.indexOf(this.navType) + 1;
+        if (nextIndex >= NavTypes.length)
+            nextIndex = 0;
+
+        return NavTypes[nextIndex];
+    }
+
+    private getPrevNavType() {
+        let prevIndex = NavTypes.indexOf(this.navType) - 1;
+        if (prevIndex < 0)
+            prevIndex = NavTypes.length - 1;
+
+        return NavTypes[prevIndex];
+    }
+
+    private getNavLength() {
+        switch (this.navType) {
+            case 'folders':
+                return this.nestedFolders?.length ?? 0;
+            case 'collections':
+                return this.nestedCollections?.length ?? 0;
+            case 'ciphers':
+                return this.ciphers?.length ?? 0;
+            default:
+                return 0;
+        }
     }
 
     private async saveState() {
