@@ -1,4 +1,4 @@
-<header appArrowNav (navDown)="navDown()" (navUp)="navUp()">
+<header appArrowNav (navDown)="navDown()" (navUp)="navUp()" (navReset)="navReset()">
     <div class="left">
         <button type="button" appBlurClick (click)="back()">
             <span class="header-icon"><i class="fa fa-chevron-left" aria-hidden="true"></i></span>
@@ -18,7 +18,7 @@
     </div>
 </header>
 <content [ngClass]="{'stacked-boxes': showGroupings()}"
-    appArrowNav (navDown)="navDown()" (navUp)="navUp()">
+    appArrowNav (navDown)="navDown()" (navUp)="navUp()" (navReset)="navReset()">
     <ng-container *ngIf="showGroupings()">
         <div class="box list" *ngIf="nestedFolders && nestedFolders.length">
             <div class="box-header">

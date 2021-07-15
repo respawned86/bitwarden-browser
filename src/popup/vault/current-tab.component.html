@@ -1,4 +1,4 @@
-<header appArrowNav (navDown)="navDown()" (navUp)="navUp()">
+<header appArrowNav (navDown)="navDown()" (navUp)="navUp()" (navReset)="navReset()">
     <div class="left">
         <app-pop-out [show]="!inSidebar"></app-pop-out>
         <button type="button" appBlurClick (click)="refresh()" appA11yTitle="{{'refresh' | i18n}}" *ngIf="inSidebar">
@@ -16,7 +16,7 @@
         </button>
     </div>
 </header>
-<content appArrowNav (navDown)="navDown()" (navUp)="navUp()">
+<content appArrowNav (navDown)="navDown()" (navUp)="navUp()" (navReset)="navReset()">
     <div class="no-items" *ngIf="!loaded">
         <i class="fa fa-spinner fa-spin fa-3x" aria-hidden="true"></i>
     </div>

@@ -13,6 +13,7 @@ export class ArrowNavDirective {
     @Output() navUp = new EventEmitter();
     @Output() navLeft = new EventEmitter();
     @Output() navRight = new EventEmitter();
+    @Output() navReset = new EventEmitter();
 
     @HostListener('keydown', ['$event']) onKeyDown($event: KeyboardEvent) {
         this.getEventEmitter($event.code)?.emit();
@@ -28,6 +29,8 @@ export class ArrowNavDirective {
                 return this.navLeft;
             case 'ArrowRight':
                 return this.navRight;
+            case 'Tab':
+                return this.navReset;
             default:
                 return null;
         }
