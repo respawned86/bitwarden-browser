@@ -37,6 +37,7 @@ import { PopupUtilsService } from '../services/popup-utils.service';
 
 const ComponentId = 'GroupingsComponent';
 const ScopeStateId = ComponentId + 'Scope';
+const NavTypes = ['types', 'folders', 'collections', 'favorites', 'noFolder'];
 
 @Component({
     selector: 'app-vault-groupings',
@@ -65,6 +66,8 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
     searchPending = false;
     searchTypeSearch = false;
     deletedCount = 0;
+    navType: string = null;
+    navIndex: number = -1;
 
     private loadedTimeout: number;
     private selectedTimeout: number;
@@ -300,6 +303,83 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
         // If input not empty, use browser default behavior of clearing input instead
 		if (e.key === 'Escape' && (this.searchText == null || this.searchText === '')) {
             BrowserApi.closePopup(window);
+        }
+    }
+
+    navDown() {
+        this.navIndex++;
+
+        if (!this.navType)
+            this.navType = this.getNextNavType();
+
+        while (this.navIndex >= this.getNavLength()) {
+            const nextType = this.getNextNavType();
+            if (this.navType === nextType) {
+                this.navReset();
+                return;
+            }
+
+            this.navType = nextType;
+            this.navIndex = 0;
+        }
+    }
+
+    navUp() {
+        this.navIndex--;
+
+        if (!this.navType)
+            this.navType = this.getPrevNavType();
+
+        while (this.navIndex < 0) {
+            const prevType = this.getPrevNavType();
+            if (this.navType === prevType) {
+                this.navReset();
+                return;
+            }
+
+            this.navType = prevType;
+            this.navIndex = this.getNavLength() - 1;
+        }
+    }
+
+    private getNextNavType() {
+        if (this.showSearching())
+            return 'search';
+
+        let nextIndex = NavTypes.indexOf(this.navType) + 1;
+        if (nextIndex >= NavTypes.length)
+            nextIndex = 0;
+
+        return NavTypes[nextIndex];
+    }
+
+    private getPrevNavType() {
+        if (this.showSearching())
+            return 'search';
+
+        let prevIndex = NavTypes.indexOf(this.navType) - 1;
+        if (prevIndex < 0)
+            prevIndex = NavTypes.length - 1;
+
+        return NavTypes[prevIndex];
+    }
+
+    private getNavLength() {
+        switch (this.navType) {
+            case 'types':
+                return 4;
+            case 'folders':
+                return this.nestedFolders?.length ?? 0;
+            case 'collections':
+                return this.nestedCollections?.length ?? 0;
+            case 'favorites':
+                return this.favoriteCiphers?.length ?? 0;
+            case 'noFolder':
+                return this.noFolderCiphers?.length ?? 0;
+            case 'search':
+                return this.ciphers?.length ?? 0;
+            default:
+                return 0;
         }
     }
 
