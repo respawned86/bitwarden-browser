@@ -224,6 +224,7 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
     }
 
     async search(timeout: number = null) {
+        this.navReset();
         this.searchPending = false;
         if (this.searchTimeout != null) {
             clearTimeout(this.searchTimeout);
