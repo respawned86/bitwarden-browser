@@ -224,6 +224,11 @@ export class CurrentTabComponent implements OnInit, OnDestroy {
         }
     }
 
+    navReset() {
+        this.navIndex = -1;
+        this.navType = null;
+    }
+
     private getNextNavType() {
         let nextIndex = NavTypes.indexOf(this.navType) + 1;
         if (nextIndex >= NavTypes.length)

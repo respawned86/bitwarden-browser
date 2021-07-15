@@ -342,6 +342,11 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
         }
     }
 
+    navReset() {
+        this.navIndex = -1;
+        this.navType = null;
+    }
+
     private getNextNavType() {
         if (this.showSearching())
             return 'search';
