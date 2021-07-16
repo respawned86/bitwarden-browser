@@ -422,6 +422,7 @@
             &:hover, &:focus {
                 @include themify($themes) {
                     color: themed('boxRowButtonHoverColor');
+                    background: themed('boxRowButtonHoverBackgroundColor');
                 }
             }
 
