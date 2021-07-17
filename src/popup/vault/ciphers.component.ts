@@ -236,14 +236,11 @@ export class CiphersComponent extends BaseCiphersComponent implements OnInit, On
             this.navType = this.getNextNavType();
 
         while (this.navIndex >= this.getNavLength()) {
-            const nextType = this.getNextNavType();
-            if (this.navType === nextType) {
-                this.navReset();
-                return;
-            }
-
-            this.navType = nextType;
+            const navType = this.navType;
+            this.navType = this.getNextNavType();
             this.navIndex = 0;
+            if (this.navType === navType)
+                return;
         }
     }
 
@@ -254,14 +251,11 @@ export class CiphersComponent extends BaseCiphersComponent implements OnInit, On
             this.navType = this.getPrevNavType();
 
         while (this.navIndex < 0) {
-            const prevType = this.getPrevNavType();
-            if (this.navType === prevType) {
-                this.navReset();
-                return;
-            }
-
-            this.navType = prevType;
+            const navType = this.navType;
+            this.navType = this.getPrevNavType();
             this.navIndex = this.getNavLength() - 1;
+            if (this.navType === navType)
+                return;
         }
     }
 
