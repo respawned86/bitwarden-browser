@@ -97,6 +97,10 @@ export class ActionButtonsComponent {
             this.navIndex = this.getNavLength() - 1;
     }
 
+    navReset() {
+        this.navIndex = -1;
+    }
+
     private getNavLength() {
         switch (this.cipher.type) {
             case this.cipherType.Login:
