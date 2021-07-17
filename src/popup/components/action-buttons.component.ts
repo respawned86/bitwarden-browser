@@ -32,6 +32,7 @@ export class ActionButtonsComponent {
 
     cipherType = CipherType;
     userHasPremiumAccess = false;
+    navIndex: number = -1;
 
     constructor(private toasterService: ToasterService, private i18nService: I18nService,
         private platformUtilsService: PlatformUtilsService, private eventService: EventService,
@@ -80,5 +81,30 @@ export class ActionButtonsComponent {
 
     view() {
         this.onView.emit(this.cipher);
+    }
+
+    navRight() {
+        this.navIndex++;
+
+        if (this.navIndex >= this.getNavLength())
+            this.navIndex = 0;
+    }
+
+    navLeft() {
+        this.navIndex--;
+
+        if (this.navIndex < 0)
+            this.navIndex = this.getNavLength() - 1;
+    }
+
+    private getNavLength() {
+        switch (this.cipher.type) {
+            case this.cipherType.Login:
+                return 4;
+            case this.cipherType.Card:
+                return 2 + (this.showView ? 1 : 0);
+            case this.cipherType.SecureNote:
+                return 1 + (this.showView ? 1 : 0);
+        }
     }
 }

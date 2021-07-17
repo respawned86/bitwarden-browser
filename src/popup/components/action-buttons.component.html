@@ -1,43 +1,46 @@
 <a href="#" class="row-btn" (click)="view()" appStopClick appStopProp appA11yTitle="{{'view' | i18n}}"
-    *ngIf="showView">
+    *ngIf="showView" appFocus [focus]="navIndex === 0">
     <i class="fa fa-lg fa-list-alt" aria-hidden="true"></i>
 </a>
 <ng-container *ngIf="cipher.type === cipherType.Login">
     <a href="#" class="row-btn" appStopClick appStopProp appA11yTitle="{{'launch' | i18n}}"
-        (click)="launchCipher()" *ngIf="!showView" [ngClass]="{disabled: !cipher.login.canLaunch}">
+        (click)="launchCipher()" *ngIf="!showView" [ngClass]="{disabled: !cipher.login.canLaunch}"
+        appFocus [focus]="navIndex === 0">
         <i class="fa fa-lg fa-share-square-o" aria-hidden="true"></i>
     </a>
     <a href="#" class="row-btn" appStopClick appStopProp appA11yTitle="{{'copyUsername' | i18n}}"
         (click)="copy(cipher, cipher.login.username, 'username', 'Username')"
-        [ngClass]="{disabled: !cipher.login.username}">
+        [ngClass]="{disabled: !cipher.login.username}" appFocus [focus]="navIndex === 1">
         <i class="fa fa-lg fa-user" aria-hidden="true"></i>
     </a>
     <a href="#" class="row-btn" appStopClick appStopProp appA11yTitle="{{'copyPassword' | i18n}}"
         (click)="copy(cipher, cipher.login.password, 'password', 'Password')"
-        [ngClass]="{disabled: (!cipher.login.password || !cipher.viewPassword)}">
+        [ngClass]="{disabled: (!cipher.login.password || !cipher.viewPassword)}"
+        appFocus [focus]="navIndex === 2">
         <i class="fa fa-lg fa-key" aria-hidden="true"></i>
     </a>
     <a href="#" class="row-btn" appStopClick appStopProp appA11yTitle="{{'copyVerificationCode' | i18n}}"
         (click)="copy(cipher, cipher.login.totp, 'verificationCodeTotp', 'TOTP')"
-        [ngClass]="{disabled: (!displayTotpCopyButton(cipher))}">
+        [ngClass]="{disabled: (!displayTotpCopyButton(cipher))}" appFocus [focus]="navIndex === 3">
         <i class="fa fa-lg fa-clock-o" aria-hidden="true"></i>
     </a>
 </ng-container>
 <ng-container *ngIf="cipher.type === cipherType.Card">
     <a href="#" class="row-btn" appStopClick appStopProp appA11yTitle="{{'copyNumber' | i18n}}"
         (click)="copy(cipher, cipher.card.number, 'number', 'Card Number')"
-        [ngClass]="{disabled: !cipher.card.number}">
+        [ngClass]="{disabled: !cipher.card.number}" appFocus [focus]="navIndex === (showView ? 1 : 0)">
         <i class="fa fa-lg fa-hashtag" aria-hidden="true"></i>
     </a>
     <a href="#" class="row-btn" appStopClick appStopProp appA11yTitle="{{'copySecurityCode' | i18n}}"
         (click)="copy(cipher, cipher.card.code, 'securityCode', 'Security Code')"
-        [ngClass]="{disabled: !cipher.card.code}">
+        [ngClass]="{disabled: !cipher.card.code}" appFocus [focus]="navIndex === (showView ? 2 : 1)">
         <i class="fa fa-lg fa-key" aria-hidden="true"></i>
     </a>
 </ng-container>
 <ng-container *ngIf="cipher.type === cipherType.SecureNote">
     <a href="#" class="row-btn" appStopClick appStopProp appA11yTitle="{{'copyNote' | i18n}}"
-        (click)="copy(cipher, cipher.notes, 'note', 'Note')" [ngClass]="{disabled: !cipher.notes}">
+        (click)="copy(cipher, cipher.notes, 'note', 'Note')" [ngClass]="{disabled: !cipher.notes}"
+        appFocus [focus]="navIndex === (showView ? 1 : 0)">
         <i class="fa fa-lg fa-clone" aria-hidden="true"></i>
     </a>
 </ng-container>
