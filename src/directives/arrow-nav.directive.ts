@@ -16,7 +16,14 @@ export class ArrowNavDirective {
     @Output() navReset = new EventEmitter();
 
     @HostListener('keydown', ['$event']) onKeyDown($event: KeyboardEvent) {
-        this.getEventEmitter($event.code)?.emit();
+        const eventEmitter = this.getEventEmitter($event.code);
+        if (!eventEmitter)
+            return;
+
+        if (eventEmitter !== this.navReset)
+            $event.preventDefault();
+
+        eventEmitter.emit();
     }
 
     private getEventEmitter(code: string) {
