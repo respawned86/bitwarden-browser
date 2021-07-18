@@ -33,11 +33,11 @@ import { BroadcasterService } from 'jslib-angular/services/broadcaster.service';
 
 import { GroupingsComponent as BaseGroupingsComponent } from 'jslib-angular/components/groupings.component';
 
+import { ArrowNavService } from '../services/arrow-nav.service';
 import { PopupUtilsService } from '../services/popup-utils.service';
 
 const ComponentId = 'GroupingsComponent';
 const ScopeStateId = ComponentId + 'Scope';
-const NavTypes = ['types', 'folders', 'collections', 'favorites', 'noFolder'];
 
 @Component({
     selector: 'app-vault-groupings',
@@ -66,8 +66,7 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
     searchPending = false;
     searchTypeSearch = false;
     deletedCount = 0;
-    navType: string = null;
-    navIndex: number = -1;
+    arrowNav = new ArrowNavService();
 
     private loadedTimeout: number;
     private selectedTimeout: number;
@@ -159,7 +158,7 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
             this.nestedFolders = this.nestedFolders.slice(0, this.nestedFolders.length - 1);
         }
 
-        super.loaded = true;
+        this.initArrowNav();
     }
 
     async loadCiphers() {
@@ -224,7 +223,6 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
     }
 
     async search(timeout: number = null) {
-        this.navReset();
         this.searchPending = false;
         if (this.searchTimeout != null) {
             clearTimeout(this.searchTimeout);
@@ -233,6 +231,7 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
         if (timeout == null) {
             this.hasSearched = this.searchService.isSearchable(this.searchText);
             this.ciphers = await this.searchService.searchCiphers(this.searchText, filterDeleted, this.allCiphers);
+            this.initArrowNav();
             return;
         }
         this.searchPending = true;
@@ -244,6 +243,7 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
                 this.ciphers = await this.searchService.searchCiphers(this.searchText, filterDeleted, this.allCiphers);
             }
             this.searchPending = false;
+            this.initArrowNav();
         }, timeout);
     }
 
@@ -307,82 +307,6 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
         }
     }
 
-    navDown() {
-        this.navIndex++;
-
-        if (!this.navType)
-            this.navType = this.getNextNavType();
-
-        while (this.navIndex >= this.getNavLength()) {
-            const navType = this.navType;
-            this.navType = this.getNextNavType();
-            this.navIndex = 0;
-            if (this.navType === navType)
-                return;
-        }
-    }
-
-    navUp() {
-        this.navIndex--;
-
-        if (!this.navType)
-            this.navType = this.getPrevNavType();
-
-        while (this.navIndex < 0) {
-            const navType = this.navType;
-            this.navType = this.getPrevNavType();
-            this.navIndex = this.getNavLength() - 1;
-            if (this.navType === navType)
-                return;
-        }
-    }
-
-    navReset() {
-        this.navIndex = -1;
-        this.navType = null;
-    }
-
-    private getNextNavType() {
-        if (this.showSearching())
-            return 'search';
-
-        let nextIndex = NavTypes.indexOf(this.navType) + 1;
-        if (nextIndex >= NavTypes.length)
-            nextIndex = 0;
-
-        return NavTypes[nextIndex];
-    }
-
-    private getPrevNavType() {
-        if (this.showSearching())
-            return 'search';
-
-        let prevIndex = NavTypes.indexOf(this.navType) - 1;
-        if (prevIndex < 0)
-            prevIndex = NavTypes.length - 1;
-
-        return NavTypes[prevIndex];
-    }
-
-    private getNavLength() {
-        switch (this.navType) {
-            case 'types':
-                return 4;
-            case 'folders':
-                return this.nestedFolders?.length ?? 0;
-            case 'collections':
-                return this.nestedCollections?.length ?? 0;
-            case 'favorites':
-                return this.favoriteCiphers?.length ?? 0;
-            case 'noFolder':
-                return this.noFolderCiphers?.length ?? 0;
-            case 'search':
-                return this.ciphers?.length ?? 0;
-            default:
-                return 0;
-        }
-    }
-
     private async saveState() {
         this.state = {
             scrollY: this.popupUtils.getContentScrollY(window),
@@ -439,5 +363,21 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
         }
 
         return true;
+    }
+
+    private initArrowNav() {
+        if (this.showSearching()) {
+            this.arrowNav.init([
+                { name: 'searchCiphers', length: this.ciphers?.length ?? 0 },
+            ]);
+        } else {
+            this.arrowNav.init([
+                { name: 'types', length: 4 },
+                { name: 'folders', length: this.nestedFolders?.length ?? 0 },
+                { name: 'collections', length: this.nestedCollections?.length ?? 0 },
+                { name: 'favorites', length: this.favoriteCiphers?.length ?? 0 },
+                { name: 'noFolder', length: this.noFolderCiphers?.length ?? 0 },
+            ]);
+        }
     }
 }

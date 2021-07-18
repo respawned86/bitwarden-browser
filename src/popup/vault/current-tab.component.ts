@@ -31,12 +31,12 @@ import { ConstantsService } from 'jslib-common/services/constants.service';
 
 import { AutofillService } from '../../services/abstractions/autofill.service';
 
+import { ArrowNavService } from '../services/arrow-nav.service';
 import { PopupUtilsService } from '../services/popup-utils.service';
 
 import { Utils } from 'jslib-common/misc/utils';
 
 const BroadcasterSubscriptionId = 'CurrentTabComponent';
-const NavTypes = ['typeLogins', 'cards', 'identities'];
 
 @Component({
     selector: 'app-current-tab',
@@ -53,8 +53,7 @@ export class CurrentTabComponent implements OnInit, OnDestroy {
     inSidebar = false;
     searchTypeSearch = false;
     loaded = false;
-    navType: string = null;
-    navIndex: number = -1;
+    arrowNav = new ArrowNavService();
 
     private totpCode: string;
     private totpTimeout: number;
@@ -188,70 +187,6 @@ export class CurrentTabComponent implements OnInit, OnDestroy {
         }
     }
 
-    navDown() {
-        this.navIndex++;
-
-        if (!this.navType)
-            this.navType = this.getNextNavType();
-
-        while (this.navIndex >= this.getNavLength()) {
-            const navType = this.navType;
-            this.navType = this.getNextNavType();
-            this.navIndex = 0;
-            if (this.navType === navType)
-                return;
-        }
-    }
-
-    navUp() {
-        this.navIndex--;
-
-        if (!this.navType)
-            this.navType = this.getPrevNavType();
-
-        while (this.navIndex < 0) {
-            const navType = this.navType;
-            this.navType = this.getPrevNavType();
-            this.navIndex = this.getNavLength() - 1;
-            if (this.navType === navType)
-                return;
-        }
-    }
-
-    navReset() {
-        this.navIndex = -1;
-        this.navType = null;
-    }
-
-    private getNextNavType() {
-        let nextIndex = NavTypes.indexOf(this.navType) + 1;
-        if (nextIndex >= NavTypes.length)
-            nextIndex = 0;
-
-        return NavTypes[nextIndex];
-    }
-
-    private getPrevNavType() {
-        let prevIndex = NavTypes.indexOf(this.navType) - 1;
-        if (prevIndex < 0)
-            prevIndex = NavTypes.length - 1;
-
-        return NavTypes[prevIndex];
-    }
-
-    private getNavLength() {
-        switch (this.navType) {
-            case 'typeLogins':
-                return this.loginCiphers?.length ?? 0;
-            case 'cards':
-                return this.cardCiphers?.length ?? 0;
-            case 'identities':
-                return this.identityCiphers?.length ?? 0;
-            default:
-                return 0;
-        }
-    }
-
     private async load() {
         const tab = await BrowserApi.getTabFromCurrentWindow();
         if (tab != null) {
@@ -303,6 +238,12 @@ export class CurrentTabComponent implements OnInit, OnDestroy {
                     break;
             }
         });
+
+        this.arrowNav.init([
+            { name: 'typeLogins', length: this.loginCiphers?.length ?? 0 },
+            { name: 'cards', length: this.cardCiphers?.length ?? 0 },
+            { name: 'identities', length: this.identityCiphers?.length ?? 0 },
+        ]);
 
         this.loginCiphers = this.loginCiphers.sort((a, b) => this.cipherService.sortCiphersByLastUsedThenName(a, b));
         this.loaded = true;
