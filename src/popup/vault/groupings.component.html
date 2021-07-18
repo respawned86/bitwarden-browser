@@ -33,7 +33,7 @@
                 <app-cipher-row *ngFor="let favoriteCipher of favoriteCiphers" [cipher]="favoriteCipher"
                     title="{{'viewItem' | i18n}}" (onSelected)="selectCipher($event)"
                     (launchEvent)="launchCipher($event)" appFocus
-                    [focus]="arrowNav.navType === 'favorite' && favoriteCiphers[arrowNav.navIndex] === favoriteCipher">
+                    [focus]="arrowNav.navType === 'favorites' && favoriteCiphers[arrowNav.navIndex] === favoriteCipher">
                 </app-cipher-row>
             </div>
         </div>

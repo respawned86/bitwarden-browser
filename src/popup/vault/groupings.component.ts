@@ -373,10 +373,10 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
             ]);
         } else {
             this.arrowNav.init([
+                { name: 'favorites', length: this.favoriteCiphers?.length ?? 0 },
                 { name: 'types', length: 4 },
                 { name: 'folders', length: this.nestedFolders?.length ?? 0 },
                 { name: 'collections', length: this.nestedCollections?.length ?? 0 },
-                { name: 'favorites', length: this.favoriteCiphers?.length ?? 0 },
                 { name: 'noFolder', length: this.noFolderCiphers?.length ?? 0 },
                 { name: 'search', length: 1 },
             ]);
