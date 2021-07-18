@@ -243,6 +243,7 @@ export class CurrentTabComponent implements OnInit, OnDestroy {
             { name: 'typeLogins', length: this.loginCiphers?.length ?? 0 },
             { name: 'cards', length: this.cardCiphers?.length ?? 0 },
             { name: 'identities', length: this.identityCiphers?.length ?? 0 },
+            { name: 'search', length: 1 },
         ]);
 
         this.loginCiphers = this.loginCiphers.sort((a, b) => this.cipherService.sortCiphersByLastUsedThenName(a, b));

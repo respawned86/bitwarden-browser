@@ -4,7 +4,8 @@
     </div>
     <div class="search">
         <input type="{{searchTypeSearch ? 'search' : 'text'}}" placeholder="{{'searchVault' | i18n}}" id="search"
-            [(ngModel)]="searchText" (input)="search(200)" autocomplete="off" appAutofocus (keydown)="closeOnEsc($event)">
+            [(ngModel)]="searchText" (input)="search(200)" autocomplete="off" appAutofocus (keydown)="closeOnEsc($event)"
+            appFocus [focus]="arrowNav.navType === 'search'">
         <i class="fa fa-search"></i>
     </div>
     <div class="right">

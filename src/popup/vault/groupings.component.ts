@@ -369,6 +369,7 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
         if (this.showSearching()) {
             this.arrowNav.init([
                 { name: 'searchCiphers', length: this.ciphers?.length ?? 0 },
+                { name: 'search', length: 1 },
             ]);
         } else {
             this.arrowNav.init([
@@ -377,6 +378,7 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
                 { name: 'collections', length: this.nestedCollections?.length ?? 0 },
                 { name: 'favorites', length: this.favoriteCiphers?.length ?? 0 },
                 { name: 'noFolder', length: this.noFolderCiphers?.length ?? 0 },
+                { name: 'search', length: 1 },
             ]);
         }
     }

@@ -137,6 +137,7 @@ export class CiphersComponent extends BaseCiphersComponent implements OnInit, On
                 { name: 'folders', length: this.nestedFolders?.length ?? 0 },
                 { name: 'collections', length: this.nestedCollections?.length ?? 0 },
                 { name: 'ciphers', length: this.ciphers?.length ?? 0 },
+                { name: 'search', length: 1 },
             ]);
 
             if (this.applySavedState && this.state != null) {
