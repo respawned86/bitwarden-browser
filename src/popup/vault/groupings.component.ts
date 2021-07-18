@@ -378,6 +378,7 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
                 { name: 'folders', length: this.nestedFolders?.length ?? 0 },
                 { name: 'collections', length: this.nestedCollections?.length ?? 0 },
                 { name: 'noFolder', length: this.noFolderCiphers?.length ?? 0 },
+                { name: 'trash', length: 1 },
                 { name: 'search', length: 1 },
             ]);
         }

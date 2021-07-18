@@ -141,7 +141,7 @@
             </div>
             <div class="box-content single-line">
                 <a href="#" class="box-content-row" appStopClick appBlurClick
-                    (click)="selectTrash()">
+                    (click)="selectTrash()" appFocus [focus]="arrowNav.navType === 'trash'">
                     <div class="row-main">
                         <div class="icon"><i class="fa fa-fw fa-lg fa-trash-o"></i></div>
                         <span class="text">{{'trash' | i18n}}</span>
