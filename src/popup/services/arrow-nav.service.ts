@@ -43,8 +43,9 @@ export class ArrowNavService {
     }
 
     reset() {
-        this.navIndex = -1;
         this.navType = null;
+        this.navIndex = -1;
+        this.navTypeIndex = -1;
     }
 
     private getNextNavType() {
